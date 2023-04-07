@@ -41,6 +41,7 @@ export interface GeneratorEdgeOptions {
   edgeAnimations?: EdgeAnimationSpeed[];
   edgeTags?: boolean;
   terminalTypes?: EdgeTerminalType[];
+  edgeAggregate?: boolean;
 }
 
 export const DefaultNodeOptions: GeneratorNodeOptions = {
@@ -61,6 +62,7 @@ export const DefaultEdgeOptions: GeneratorEdgeOptions = {
   edgeStatuses: [NodeStatus.default],
   edgeAnimations: [EdgeAnimationSpeed.none],
   edgeTags: false,
+  edgeAggregate: false,
   terminalTypes: [EdgeTerminalType.directional]
 };
 
@@ -126,7 +128,8 @@ export const generateEdge = (
     terminalType: options.terminalTypes[index % options.terminalTypes.length],
     terminalStatus: options.edgeStatuses[index % options.edgeStatuses.length],
     tag: options.edgeTags ? '250kbs' : undefined,
-    tagStatus: options.edgeStatuses[index % options.edgeStatuses.length]
+    tagStatus: options.edgeStatuses[index % options.edgeStatuses.length],
+    aggregate: options.edgeAggregate
   });
 
 export const generateDataModel = (

@@ -159,6 +159,7 @@ export const createEdge = (
     terminalStatus?: NodeStatus;
     tag?: string;
     tagStatus?: string;
+    aggregate?: boolean;
   }
 ): EdgeModel => ({
   id: `edge-${sourceId}-${targetId}`,
@@ -167,6 +168,7 @@ export const createEdge = (
   target: targetId,
   edgeStyle: options.style,
   animationSpeed: options.animation,
+  aggregate: options.aggregate,
   // data items are used to pass to the component to show various option, demo purposes only
   data: {
     endTerminalType: options.terminalType,

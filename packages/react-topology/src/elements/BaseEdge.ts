@@ -1,7 +1,7 @@
 import { computed, observable } from 'mobx';
 import Point from '../geom/Point';
 import { Anchor, AnchorEnd, Edge, EdgeAnimationSpeed, EdgeModel, EdgeStyle, ModelKind, Node } from '../types';
-import { getTopCollapsedParent } from '../utils';
+import { getAggregatedEdgeBendpoints, getTopCollapsedParent } from '../utils';
 import BaseElement from './BaseElement';
 
 export default class BaseEdge<E extends EdgeModel = EdgeModel, D = any> extends BaseElement<E, D>
@@ -17,6 +17,9 @@ export default class BaseEdge<E extends EdgeModel = EdgeModel, D = any> extends 
 
   @observable.ref
   private animationSpeed?: EdgeAnimationSpeed;
+
+  @observable.ref
+  private aggregate?: boolean;
 
   @observable.shallow
   private bendpoints?: Point[];
@@ -93,7 +96,18 @@ export default class BaseEdge<E extends EdgeModel = EdgeModel, D = any> extends 
     return getTopCollapsedParent(this.target);
   }
 
+  getAggregate(): boolean {
+    return this.aggregate;
+  }
+
+  setAggregate(aggregate: boolean) {
+    this.aggregate = aggregate;
+  }
+
   getBendpoints(): Point[] {
+    if (this.aggregate) {
+      return getAggregatedEdgeBendpoints(this);
+    }
     return this.bendpoints || [];
   }
 
@@ -184,8 +198,15 @@ export default class BaseEdge<E extends EdgeModel = EdgeModel, D = any> extends 
     if ('animationSpeed' in model) {
       this.animationSpeed = model.animationSpeed;
     }
-    if ('bendpoints' in model) {
-      this.bendpoints = model.bendpoints ? model.bendpoints.map(b => new Point(b[0], b[1])) : [];
+
+    if ('aggregate' in model && model.aggregate) {
+      this.aggregate = true;
+      this.bendpoints = [];
+    } else {
+      this.aggregate = false;
+      if ('bendpoints' in model) {
+        this.bendpoints = model.bendpoints ? model.bendpoints.map(b => new Point(b[0], b[1])) : [];
+      }
     }
   }
 
@@ -196,7 +217,8 @@ export default class BaseEdge<E extends EdgeModel = EdgeModel, D = any> extends 
       target: this.getTarget() ? this.getTarget().getId() : undefined,
       edgeStyle: this.edgeStyle,
       animationSpeed: this.animationSpeed,
-      bendpoints: this.getBendpoints().map(bp => [bp.x, bp.y])
+      aggregate: this.aggregate,
+      bendpoints: this.bendpoints?.map(bp => [bp.x, bp.y]) || []
     };
   }
 }

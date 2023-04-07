@@ -10,7 +10,8 @@ import {
   ModelKind,
   ADD_CHILD_EVENT,
   REMOVE_CHILD_EVENT,
-  ELEMENT_VISIBILITY_CHANGE_EVENT
+  ELEMENT_VISIBILITY_CHANGE_EVENT,
+  PointTuple
 } from '../types';
 import Stateful from '../utils/Stateful';
 import { Translatable } from '../geom/types';
@@ -42,6 +43,8 @@ export default abstract class BaseElement<E extends ElementModel = ElementModel,
 
   @observable
   private style: any = {};
+
+  private lastHullPoints: PointTuple[] | null;
 
   abstract getKind(): ModelKind;
 
@@ -146,6 +149,14 @@ export default abstract class BaseElement<E extends ElementModel = ElementModel,
 
   setData(data: D | undefined): void {
     this.data = data;
+  }
+
+  getLastHullPoints() {
+    return this.lastHullPoints;
+  }
+
+  setLastHullPoints(hullPoints: PointTuple[] | null) {
+    this.lastHullPoints = hullPoints;
   }
 
   getStyle<T extends {}>(): T {

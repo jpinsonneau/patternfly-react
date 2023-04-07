@@ -1,3 +1,4 @@
+export * from './aggregate-utils';
 export * from './anchor-utils';
 export { default as ControllerContext } from './ControllerContext';
 export { default as ElementContext } from './ElementContext';

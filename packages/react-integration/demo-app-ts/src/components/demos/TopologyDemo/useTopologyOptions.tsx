@@ -264,6 +264,11 @@ export const useTopologyOptions = (
           isChecked={edgeOptions.edgeTags}
           onClick={() => setEdgeOptions(prev => ({ ...prev, edgeTags: !prev.edgeTags }))}
         />
+        <SelectOption
+          value="Aggregate"
+          isChecked={edgeOptions.edgeAggregate}
+          onClick={() => setEdgeOptions(prev => ({ ...prev, edgeAggregate: !prev.edgeAggregate }))}
+        />
       </div>
     );
 

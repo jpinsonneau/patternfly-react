@@ -144,7 +144,10 @@ const DefaultGroupExpanded: React.FunctionComponent<DefaultGroupExpandedProps> =
     const hullPoints: (PointWithSize | PointTuple)[] =
       points.length > 2 ? polygonHull(points as PointTuple[]) : (points as PointTuple[]);
     if (!hullPoints) {
+      element.setLastHullPoints(null);
       return null;
+    } else {
+      element.setLastHullPoints(hullPoints as PointTuple[]);
     }
 
     // change the box only when not dragging
